@@ -43,7 +43,10 @@ def detect(img):
             box = decode(loc,priors,variances)
             x1,y1,x2,y2 = box[0]*1.0
             # cv2.rectangle(imgshow,(int(x1),int(y1)),(int(x2),int(y2)),(0,0,255),1)
+            if score<0.5: continue
             bboxlist.append([x1,y1,x2,y2,score])
     bboxlist = np.array(bboxlist)
     if 0==len(bboxlist): bboxlist=np.zeros((1, 5))
+    keep = nms(bboxlist,0.3)
+    bboxlist = bboxlist[keep,:]
     return bboxlist
